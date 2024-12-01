@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'package:aplikasi_ecommerce/models/user.dart';
+import 'package:aplikasi_ecommerce/data/user_data.dart';
 
 void main() {
   runApp(const MyApp());

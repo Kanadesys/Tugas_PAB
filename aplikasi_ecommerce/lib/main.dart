@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:aplikasi_ecommerce/screens/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -101,10 +102,10 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildNavButton('Cream'),
-                  _buildNavButton('Moisturizers'),
-                  _buildNavButton('Lotion'),
-                  _buildNavButton('Serum'),
+                  _buildNavButton(context, 'Facial Wash', const FacialWashScreen()),
+                  _buildNavButton(context, 'Moisturizer', const MoisturizerScreen()),
+                  _buildNavButton(context, 'Essence', const EssenceScreen()),
+                  _buildNavButton(context, 'Serum', const SerumScreen()),
                 ],
               ),
             ),
@@ -145,23 +146,38 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             _selectedIndex = index;
           });
+          // Update the displayed page based on selected index
+          if (_selectedIndex == 0) {
+            // Navigate to the search page
+          } else if (_selectedIndex == 2) {
+            // Navigate to the cart page
+          }
         },
       ),
     );
   }
 
-  Widget _buildNavButton(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.grey[200],
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
+  Widget _buildNavButton(BuildContext context, String text, Widget page) {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to the selected screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => page),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.grey[200],
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );
