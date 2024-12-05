@@ -1,3 +1,4 @@
+import 'package:aplikasi_ecommerce/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'package:aplikasi_ecommerce/models/user.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => const AuthPage(),
-        '/main': (context) => const HomePage(),
+        '/main': (context) => const HomeScreen(),
       },
     );
   }

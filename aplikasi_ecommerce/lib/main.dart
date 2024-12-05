@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:aplikasi_ecommerce/screens/home_screen.dart';
+import 'package:aplikasi_ecommerce/screens/cart_screen.dart';
+import 'package:aplikasi_ecommerce/screens/profile_screen.dart';
+import 'package:aplikasi_ecommerce/screens/search_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -97,15 +100,15 @@ class _HomePageState extends State<HomePage> {
             ),
 
             // Navigation Buttons
-            Padding(
+           Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildNavButton(context, 'Facial Wash', const FacialWashScreen()),
-                  _buildNavButton(context, 'Moisturizer', const MoisturizerScreen()),
-                  _buildNavButton(context, 'Essence', const EssenceScreen()),
-                  _buildNavButton(context, 'Serum', const SerumScreen()),
+                  _buildNavButton(context, 'Facial Wash', const HomeScreen ()),
+                  _buildNavButton(context, 'Moisturizer', const HomeScreen ()),
+                  _buildNavButton(context, 'Essence', const  HomeScreen()),
+                  _buildNavButton(context, 'Serum', const HomeScreen()),
                 ],
               ),
             ),
@@ -139,8 +142,8 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'Cart'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
           setState(() {
