@@ -100,14 +100,14 @@ class _HomePageState extends State<HomePage> {
             ),
 
             // Navigation Buttons
-           Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildNavButton(context, 'Facial Wash', const HomeScreen ()),
-                  _buildNavButton(context, 'Moisturizer', const HomeScreen ()),
-                  _buildNavButton(context, 'Essence', const  HomeScreen()),
+                  _buildNavButton(context, 'Facial Wash', const HomeScreen()),
+                  _buildNavButton(context, 'Moisturizer', const HomeScreen()),
+                  _buildNavButton(context, 'Essence', const HomeScreen()),
                   _buildNavButton(context, 'Serum', const HomeScreen()),
                 ],
               ),
@@ -151,9 +151,20 @@ class _HomePageState extends State<HomePage> {
           });
           // Update the displayed page based on selected index
           if (_selectedIndex == 0) {
-            // Navigate to the search page
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SearchScreen()),
+            );
           } else if (_selectedIndex == 2) {
-            // Navigate to the cart page
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartScreen()),
+            );
+          } else if (_selectedIndex == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
           }
         },
       ),
@@ -220,15 +231,15 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
+                children: const [
+                  Text(
                     'COSRX',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Advanced Snail Mucin 96 Power Essence',
                     style: TextStyle(
                       fontSize: 14,
@@ -237,12 +248,12 @@ class _HomePageState extends State<HomePage> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text(
                     'IDR 3,000,000',
                     style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[600],
+                        color: Colors.grey,
                         fontWeight: FontWeight.w800),
                   ),
                 ],
