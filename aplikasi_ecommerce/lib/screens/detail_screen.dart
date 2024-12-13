@@ -16,9 +16,9 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Future<void> _loadFavoriteStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> favoriteProducts = prefs.getStringList('favoriteProducts') ?? [];
+    List<String> favoriteHomes = prefs.getStringList('favoriteHomes') ?? [];
     setState(() {
-      _isFavorite = favoriteProducts.contains(widget.skincareProduct.name);
+      _isFavorite = favoriteHomes.contains(widget.skincareProduct.name);
     });
   }
 
@@ -30,23 +30,23 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Future<void> _toggleFavorite() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> favoriteProducts = prefs.getStringList('favoriteProducts') ?? [];
+    List<String> favoriteHomes = prefs.getStringList('favoriteHomes') ?? [];
 
     setState(() {
       if (_isFavorite) {
-        favoriteProducts.remove(widget.skincareProduct.name);
+        favoriteHomes.remove(widget.skincareProduct.name);
         _isFavorite = false;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('${widget.skincareProduct.name} removed from favorites')));
       } else {
-        favoriteProducts.add(widget.skincareProduct.name);
+        favoriteHomes.add(widget.skincareProduct.name);
         _isFavorite = true;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('${widget.skincareProduct.name} added to favorites')));
       }
     });
 
-    await prefs.setStringList('favoriteProducts', favoriteProducts);
+    await prefs.setStringList('favoriteHomes', favoriteHomes);
   }
 
   @override
@@ -65,16 +65,11 @@ class _DetailScreenState extends State<DetailScreen> {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.skincareProduct.imageUrl,
-                      placeholder: (context, url) => Transform.scale(
-                        scale: 0.2,
-                        child: const CircularProgressIndicator(),
-                      ),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                    child: Image.asset(
+                      widget.skincareProduct.imageAsset,
+                      fit: BoxFit.cover,
                       width: double.infinity,
                       height: 250,
-                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -122,12 +117,12 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       const Icon(
                         Icons.category,
-                        color: Colors.purple,
+                        color: Colors.red,
                       ),
                       const SizedBox(width: 8),
                       const SizedBox(
                         width: 70,
-                        child: Text('Kategori',
+                        child: Text('Category',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                       Text(': ${widget.skincareProduct.category}')
@@ -137,15 +132,30 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       const Icon(
                         Icons.attach_money,
+                        color: Colors.blue,
+                      ),
+                      const SizedBox(width: 8),
+                      const SizedBox(
+                        width: 70,
+                        child: Text('Price',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Text(': ${widget.skincareProduct.price}')
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.description,
                         color: Colors.green,
                       ),
                       const SizedBox(width: 8),
                       const SizedBox(
                         width: 70,
-                        child: Text('Harga',
+                        child: Text('Type',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
-                      Text(': Rp ${widget.skincareProduct.price}')
+                      Text(': ${widget.skincareProduct.description}')
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -168,6 +178,35 @@ class _DetailScreenState extends State<DetailScreen> {
                 ],
               ),
             ),
+            // ---------------- BAWAH ------------------
+            Padding(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.skincareProduct.imageUrl.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: CachedNetworkImage(
+                              imageUrl: widget.skincareProduct.imageUrl[index],
+                              placeholder: (context, url) => Transform.scale(
+                                scale: 0.2,
+                                child: const CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                              width: 200,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            )),
+                      );
+                    },
+                  ),
+                ))
           ],
         ),
       )),

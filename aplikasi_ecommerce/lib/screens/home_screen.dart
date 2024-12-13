@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text('Skincare App'),
+        title: const Text('Skincare Lab'),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     ),
                   ),
                   const Text(
-                    'Welcome to Skincare App',
+                    'Facial Wash',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -134,21 +134,21 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 children: [
                   Expanded(
                     child: Image.asset(
-                      'assets/images/skincare_${index + 1}.png', // Ganti dengan path gambar
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMjgIF3hq_s9D9Wrt0RZ20Dq29AMBDl4oG2w&s', // Ganti dengan path gambar
                       fit: BoxFit.cover,
                     ),
                   ),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
-                      'Product Name',
+                      'Skintific Panthenol Facial Wash',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      '\$29.99',
+                      'Rp. 150.000',
                       style: TextStyle(color: Colors.green),
                     ),
                   ),
