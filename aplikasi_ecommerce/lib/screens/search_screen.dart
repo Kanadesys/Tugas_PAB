@@ -8,57 +8,57 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search Skincare'),
-        backgroundColor: Colors.blue, // Warna yang lebih soft dan elegan
+        backgroundColor: Colors.blue, // Blue for the AppBar
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Input Search dengan desain lebih elegan
+            // Input Search with a more modern and clean design
             TextField(
               decoration: InputDecoration(
                 hintText: 'Search skincare products...',
-                hintStyle: TextStyle(color: Colors.grey[600]), // Warna hint lebih soft
-                prefixIcon: Icon(Icons.search, color: Colors.pinkAccent), // Ikon pencarian yang lebih modern
+                hintStyle: TextStyle(color: Colors.blue[600]), // Lighter blue for hint text
+                prefixIcon: Icon(Icons.search, color: Colors.blue), // Blue search icon
                 filled: true,
-                fillColor: Colors.pink[50], // Background soft untuk input field
+                fillColor: Colors.white, // White background for input field
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30), // Border lebih membulat
-                  borderSide: BorderSide.none, // Hapus border default
+                  borderRadius: BorderRadius.circular(30), // Rounded corners
+                  borderSide: BorderSide.none, // Remove default border
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(color: Colors.pinkAccent, width: 2), // Fokus border dengan warna pink
+                  borderSide: const BorderSide(color: Colors.blueAccent, width: 2), // Blue border on focus
                 ),
               ),
               onChanged: (value) {
-                // Logika pencarian dapat ditambahkan di sini
+                // Add search logic here
               },
             ),
             const SizedBox(height: 20),
-            // Hasil Pencarian menggunakan Card untuk tampil lebih menarik
+            // Display search results using Card for a more stylish look
             Expanded(
               child: ListView.builder(
-                itemCount: 5, // Ganti dengan jumlah hasil pencarian sebenarnya
+                itemCount: 5, // Replace with actual search result count
                 itemBuilder: (context, index) {
                   return Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    elevation: 5, // Efek shadow pada card
+                    elevation: 5, // Card shadow effect
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16),
                       leading: CircleAvatar(
                         radius: 30,
-                        backgroundImage: AssetImage('assets/skincare_product.jpg'), // Ganti dengan gambar produk
+                        backgroundImage: AssetImage('assets/skincare_product.jpg'), // Replace with product image
                       ),
                       title: Text(
                         'Skincare Facial Wash ${index + 1}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: Colors.black87, // Black text for title
                           fontSize: 16,
                         ),
                       ),
@@ -68,10 +68,10 @@ class SearchScreen extends StatelessWidget {
                       ),
                       trailing: const Icon(
                         Icons.arrow_forward,
-                        color: Colors.pinkAccent,
+                        color: Colors.blueAccent, // Blue icon for forward arrow
                       ),
                       onTap: () {
-                        // Logika ketika item diklik
+                        // Handle click action here
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Clicked on Product ${index + 1}')),
                         );

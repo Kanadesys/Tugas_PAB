@@ -34,6 +34,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
     setState(() {
       if (_isFavorite) {
+        //proses unfavorite
         favoriteHomes.remove(widget.skincareProduct.name);
         _isFavorite = false;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
