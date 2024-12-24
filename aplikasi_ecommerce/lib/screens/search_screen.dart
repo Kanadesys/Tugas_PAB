@@ -19,8 +19,10 @@ class SearchScreen extends StatelessWidget {
             TextField(
               decoration: InputDecoration(
                 hintText: 'Search skincare products...',
-                hintStyle: TextStyle(color: Colors.blue[600]), // Lighter blue for hint text
-                prefixIcon: Icon(Icons.search, color: Colors.blue), // Blue search icon
+                hintStyle: TextStyle(
+                    color: Colors.blue[600]), // Lighter blue for hint text
+                prefixIcon: const Icon(Icons.search,
+                    color: Colors.blue), // Blue search icon
                 filled: true,
                 fillColor: Colors.white, // White background for input field
                 border: OutlineInputBorder(
@@ -29,7 +31,9 @@ class SearchScreen extends StatelessWidget {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(color: Colors.blueAccent, width: 2), // Blue border on focus
+                  borderSide: const BorderSide(
+                      color: Colors.blueAccent,
+                      width: 2), // Blue border on focus
                 ),
               ),
               onChanged: (value) {
@@ -50,13 +54,14 @@ class SearchScreen extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16),
-                      leading: CircleAvatar(
+                      leading: const CircleAvatar(
                         radius: 30,
-                        backgroundImage: AssetImage('assets/skincare_product.jpg'), // Replace with product image
+                        backgroundImage: AssetImage(
+                            'assets/skincare_product.jpg'), // Replace with product image
                       ),
                       title: Text(
                         'Skincare Facial Wash ${index + 1}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black87, // Black text for title
                           fontSize: 16,
@@ -73,7 +78,8 @@ class SearchScreen extends StatelessWidget {
                       onTap: () {
                         // Handle click action here
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Clicked on Product ${index + 1}')),
+                          SnackBar(
+                              content: Text('Clicked on Product ${index + 1}')),
                         );
                       },
                     ),

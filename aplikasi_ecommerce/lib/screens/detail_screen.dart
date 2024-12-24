@@ -38,12 +38,14 @@ class _DetailScreenState extends State<DetailScreen> {
         favoriteHomes.remove(widget.skincareProduct.name);
         _isFavorite = false;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('${widget.skincareProduct.name} removed from favorites')));
+            content:
+                Text('${widget.skincareProduct.name} removed from favorites')));
       } else {
         favoriteHomes.add(widget.skincareProduct.name);
         _isFavorite = true;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('${widget.skincareProduct.name} added to favorites')));
+            content:
+                Text('${widget.skincareProduct.name} added to favorites')));
       }
     });
 
@@ -67,7 +69,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: Image.asset(
-                      widget.skincareProduct.imageAsset,
+                      widget.skincareProduct.imageUrl,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 250,
@@ -77,9 +79,8 @@ class _DetailScreenState extends State<DetailScreen> {
                 // Tombol Back
                 Container(
                   margin: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.5),
-                      shape: BoxShape.circle),
+                  decoration: const BoxDecoration(
+                      color: Colors.white, shape: BoxShape.circle),
                   child: IconButton(
                       onPressed: () {
                         Navigator.pop(context);

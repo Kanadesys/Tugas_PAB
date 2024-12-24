@@ -1,287 +1,354 @@
-// import 'package:flutter/material.dart';
-// import 'package:aplikasi_ecommerce/data/home_data.dart';
-// import 'package:aplikasi_ecommerce/models/home.dart';
-// import 'package:aplikasi_ecommerce/screens/detail_screen.dart';
-// import 'package:aplikasi_ecommerce/screens/favorite_screen.dart';
-
-// class HomeScreen extends StatefulWidget {
-//   const HomeScreen({super.key});
-
-//   @override
-//   State<HomeScreen> createState() => _HomeScreenState();
-// }
-
-// class _HomeScreenState extends State<HomeScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Home'),
-//         actions: [
-//           Container(
-//             margin: const EdgeInsets.only(right: 16),
-//             child: ElevatedButton.icon(
-//                 onPressed: () {
-//                   Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                           builder: (context) => const FavoriteScreen()));
-//                 },
-//                 label: const Text('Favorite'),
-//                 icon: const Icon(Icons.favorite)),
-//           )
-//         ],
-//       ),
-//       body: SafeArea(
-//           child: SingleChildScrollView(
-//         child: Column(
-//           children: [
-//             GridView.builder(
-//               shrinkWrap: true,
-//               physics: const NeverScrollableScrollPhysics(),
-//               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//                   crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8),
-//               padding: const EdgeInsets.all(8),
-//               itemCount: skincareList.length,
-//               itemBuilder: (context, index) {
-//                 SkincareProduct skincareProduct = skincareList[index];
-//                 return InkWell(
-//                   onTap: () {
-//                     Navigator.push(
-//                         context,
-//                         MaterialPageRoute(
-//                             builder: (context) =>
-//                                 DetailScreen(skincareProduct: skincareProduct)));
-//                   },
-//                   child: Card(
-//                       shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(16)),
-//                       margin: const EdgeInsets.all(6),
-//                       elevation: 1,
-//                       child: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.stretch,
-//                         children: [
-//                           // Gambar Tempat
-//                           Expanded(
-//                               child: ClipRRect(
-//                             borderRadius: BorderRadius.circular(16),
-//                             child: Image.asset(
-//                               skincareProduct.imageAsset,
-//                               fit: BoxFit.cover,
-//                             ),
-//                           )),
-//                           // Nama Tempat
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 16, top: 8),
-//                             child: Text(
-//                               skincareProduct.name,
-//                               style: const TextStyle(
-//                                   fontSize: 16, fontWeight: FontWeight.bold),
-//                             ),
-//                           ),
-//                           // Lokasi Tempat
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 16, bottom: 8),
-//                             child: Text(
-//                               skincareProduct.description,
-//                               style: const TextStyle(fontSize: 12),
-//                             ),
-//                           ),
-//                         ],
-//                       )),
-//                 );
-//               },
-//             )
-//           ],
-//         ),
-//       )),
-//     );
-//   }
-// }
-
-
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:aplikasi_ecommerce/data/home_data.dart';
 import 'package:aplikasi_ecommerce/models/home.dart';
-import 'package:aplikasi_ecommerce/screens/detail_screen.dart';
-import 'package:aplikasi_ecommerce/screens/favorite_screen.dart';
+import 'package:aplikasi_ecommerce/screens/cart_screen.dart';
+import 'package:aplikasi_ecommerce/screens/profile_screen.dart';
+import 'package:aplikasi_ecommerce/screens/search_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+void main() {
+  runApp(const HomeScreen());
+}
+
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
+      ),
+      home: const HomePage(),
+    );
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  void initState() {
-    _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
-    _tabController.addListener(_handleTabSelection);
-    super.initState();
-  }
+  State<HomePage> createState() => _HomePageState();
+}
 
-  void _handleTabSelection() {
-    if (_tabController.indexIsChanging) {
-      setState(() {});
+class _HomePageState extends State<HomePage> {
+  String selectedCategory = 'All';
+  int _selectedIndex = 1;
+  int _currentCarouselIndex = 0;
+
+  // Filter skincare products
+  List<SkincareProduct> get filteredProducts {
+    if (selectedCategory == 'All') {
+      return skincareList;
     }
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+    return skincareList
+        .where((product) => product.category == selectedCategory)
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text('Skincare Lab'),
-        centerTitle: true,
-      ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // Header dengan ikon menu
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      // Aksi untuk ikon menu
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Menu tapped!')),
-                      );
-                    },
-                    child: Icon(
-                      Icons.sort_rounded,
-                      color: Colors.blue[900],
-                      size: 28,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(width: 10),
+                    CircleAvatar(
+                      backgroundColor: Colors.grey[300],
+                      child: const Icon(Icons.person, color: Colors.grey),
                     ),
+                  ],
+                ),
+              ),
+
+              // SEARCH BAR
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       color: Colors.grey[100],
+              //       borderRadius: BorderRadius.circular(15),
+              //     ),
+              //     child: TextField(
+              //       decoration: InputDecoration(
+              //         hintText: 'Search products...',
+              //         prefixIcon: const Icon(Icons.search, color: Colors.grey),
+              //         border: InputBorder.none,
+              //         contentPadding: const EdgeInsets.symmetric(
+              //           horizontal: 16.0,
+              //           vertical: 12.0,
+              //         ),
+              //         suffixIcon: IconButton(
+              //           icon: const Icon(Icons.clear, color: Colors.grey),
+              //           onPressed: () {},
+              //         ),
+              //       ),
+              //       onTap: () {
+              //         Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => const SearchScreen()),
+              //         );
+              //       },
+              //     ),
+              //   ),
+              // ),
+              // const SizedBox(height: 16),
+
+              // "Today's Offer" Section
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  "Today's Offer",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const Text(
-                    'Facial Wash',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 200,
+                child: Stack(
+                  children: [
+                    CarouselSlider(
+                      options: CarouselOptions(
+                        height: 180,
+                        viewportFraction: 1.0,
+                        autoPlay: true,
+                        autoPlayInterval: const Duration(seconds: 4),
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentCarouselIndex = index;
+                          });
+                        },
+                      ),
+                      items: List.generate(4, (index) {
+                        final colors = [
+                          Colors.red,
+                          Colors.blue,
+                          Colors.green,
+                          Colors.purple,
+                        ];
+                        return Container(
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: colors[index],
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        );
+                      }),
                     ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: DotsIndicator(
+                        dotsCount: 4,
+                        position: _currentCarouselIndex,
+                        decorator: const DotsDecorator(
+                          color: Colors.grey,
+                          activeColor: Colors.black,
+                          size: Size.square(8.0),
+                          activeSize: Size.square(8.0),
+                          spacing: EdgeInsets.all(4.0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Navigation Buttons
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildNavButton(context, 'All'),
+                    _buildNavButton(context, 'Serum'),
+                    _buildNavButton(context, 'Moisturizer'),
+                    _buildNavButton(context, 'Sunscreen'),
+                    _buildNavButton(context, 'Night Cream'),
+                    _buildNavButton(context, 'Scrub')
+                  ],
+                ),
+              ),
+
+              // "Popular This Week" Section
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  "Popular This Week",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Icon(
-                    Icons.shopping_cart,
-                    color: Colors.blue[900],
-                    size: 28,
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              // produk builder
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.75,
                   ),
-                ],
+                  itemCount: filteredProducts.length,
+                  itemBuilder: (context, index) {
+                    return _buildProductCard(filteredProducts[index]);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        selectedLabelStyle: const TextStyle(color: Colors.black),
+        unselectedLabelStyle: const TextStyle(color: Colors.grey),
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart), label: 'Cart'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          // Navigate to the selected screen
+          if (_selectedIndex == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SearchScreen()),
+            );
+          } else if (_selectedIndex == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartScreen()),
+            );
+          } else if (_selectedIndex == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildNavButton(BuildContext context, String text) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedCategory = text; // Update the selected category
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: selectedCategory == text ? Colors.blue[100] : Colors.grey[200],
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // GRID PRODUK
+  Widget _buildProductCard(SkincareProduct product) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromARGB(255, 236, 236, 236),
+            spreadRadius: 5,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // GAMBARRR PRODUKKKKKKKKKKKKK
+          Container(
+            height: 250,
+            decoration: BoxDecoration(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(15)),
+              image: DecorationImage(
+                image: NetworkImage(product.imageUrl),
               ),
             ),
-            // Tab Bar
-            TabBar(
-              controller: _tabController,
-              indicatorColor: Colors.blue,
-              labelColor: Colors.blue[900],
-              unselectedLabelColor: Colors.grey,
-              tabs: const [
-                Tab(text: 'Home'),
-                Tab(text: 'Categories'),
-                Tab(text: 'Favorites'),
-                Tab(text: 'Profile'),
+          ),
+
+          // DETAIL PRODUKKKKKKKKKKKKK
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.category,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  product.name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'IDR ${product.price.toStringAsFixed(0)}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ],
             ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildHomeContent(),
-                  _buildCategoriesContent(),
-                  _buildFavoritesContent(),
-                  _buildProfileContent(),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHomeContent() {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        const Text(
-          'Featured Products',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 16),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 3 / 4,
           ),
-          itemCount: 4, // Ganti dengan jumlah produk aktual
-          itemBuilder: (context, index) {
-            return Card(
-              elevation: 3,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Image.asset(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMjgIF3hq_s9D9Wrt0RZ20Dq29AMBDl4oG2w&s', // Ganti dengan path gambar
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Skintific Panthenol Facial Wash',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      'Rp. 150.000',
-                      style: TextStyle(color: Colors.green),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCategoriesContent() {
-    return const Center(
-      child: Text('Categories content goes here'),
-    );
-  }
-
-  Widget _buildFavoritesContent() {
-    return const Center(
-      child: Text('Favorites content goes here'),
-    );
-  }
-
-  Widget _buildProfileContent() {
-    return const Center(
-      child: Text('Profile content goes here'),
+        ],
+      ),
     );
   }
 }
