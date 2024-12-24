@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:aplikasi_ecommerce/screens/home_screen.dart';
-import 'package:aplikasi_ecommerce/screens/profile_screen.dart';
-import 'package:aplikasi_ecommerce/screens/search_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -11,145 +8,208 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  int _selectedIndex = 2;
+  final List<Map<String, dynamic>> cartItems = [
+    {
+      'brand': 'Skintific',
+      'name': 'Acne Facial Wash Saliclyid Acid',
+      'price': 129000,
+      'discountedPrice': 99000,
+      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8ov0PyDbBxYoYcHinAd2J_37zfwmXib4KdA&s',
+      'quantity': 1,
+    },
+  ];
+
+  int calculateSubtotal() {
+  return cartItems.fold(0, (sum, item) {
+    return sum + (item['discountedPrice'] as int) * (item['quantity'] as int);
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Items in your cart:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Contoh List Item
-            Expanded(
-              child: ListView(
-                children: [
-                  _buildCartItem('Item 1', 2, 50.0),
-                  _buildCartItem('Item 2', 1, 75.0),
-                  _buildCartItem('Item 3', 3, 30.0),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Bagian Total
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+      appBar: AppBar(
+        title: const Text('Shopping Bag'),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: cartItems.length,
+              itemBuilder: (context, index) {
+                final item = cartItems[index];
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Product Image
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            item['imageUrl'],
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+
+                        // Product Details
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item['brand'],
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                item['name'],
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                              const SizedBox(height: 4),
+                              // Text(
+                              //   'Shade: ${item['shade']}',
+                              //   style: const TextStyle(color: Colors.grey),
+                              // ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Rp ${item['price']}',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      decoration: TextDecoration.lineThrough,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Rp ${item['discountedPrice']}',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Quantity and Actions
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                setState(() {
+                                  cartItems.removeAt(index);
+                                });
+                              },
+                            ),
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (item['quantity'] > 1) {
+                                        item['quantity']--;
+                                      }
+                                    });
+                                  },
+                                ),
+                                Text('${item['quantity']}'),
+                                IconButton(
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () {
+                                    setState(() {
+                                      item['quantity']++;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
+                );
+              },
+            ),
+          ),
+
+          // Rewards and Checkout Section
+          Container(
+            color: Colors.grey[100],
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                // Redeem Rewards Section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Redeem Your Rewards'),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle redeem action
+                      },
+                      child: const Text('REDEEM NOW'),
+                    ),
+                  ],
                 ),
-                Text(
-                  '\$245.0',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                const Divider(height: 32),
+
+                // Subtotal
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Subtotal', style: TextStyle(fontSize: 16)),
+                    Text(
+                      'Rp ${calculateSubtotal()}',
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Checkout Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle checkout action
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Proceeding to checkout!')),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: Colors.red,
+                    ),
+                    child: const Text(
+                      'CHECKOUT',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            // Tombol Checkout
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Logika untuk checkout
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Proceed to checkout!')),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text(
-                  'Checkout',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        selectedLabelStyle: const TextStyle(color: Colors.black),
-        unselectedLabelStyle: const TextStyle(color: Colors.grey),
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'Cart'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          ),
         ],
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          // Navigate to the selected screen
-          if (_selectedIndex == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SearchScreen()),
-            );
-          } else if (_selectedIndex == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
-          } else if (_selectedIndex == 3) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
-            );
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _buildCartItem(String itemName, int quantity, double price) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              itemName,
-              style: const TextStyle(fontSize: 16),
-            ),
-            Text(
-              'Qty: $quantity',
-              style: const TextStyle(fontSize: 16),
-            ),
-            Text(
-              '\$${(price * quantity).toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black54,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

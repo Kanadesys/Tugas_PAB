@@ -1,94 +1,174 @@
 import 'package:flutter/material.dart';
+import 'package:aplikasi_ecommerce/screens/home_screen.dart'; // Pastikan Anda mengimpor HomeScreen
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
   @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  String selectedCategory = 'All';
+  String searchQuery = '';
+
+  final List<String> categories = ['All', 'Cream', 'Moisturizers', 'Lotion', 'Serum', 'Spray'];
+
+  // Example product data
+  final List<Map<String, dynamic>> products = [
+    {
+      'name': 'Skintific Brightening Serum',
+      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe8_ENcHPuulBp0h58ye1qwWhS2vfZ5tAPHw&s',
+      'price': 23.00,
+      'category': 'Serum'
+    },
+    {
+      'name': 'Skintific Exfoliating Lotion',
+      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTa8PIi5PhOH_YpfFbwKHUOaIbSxcoEzOh2A&s',
+      'price': 15.00,
+      'category': 'Lotion'
+    },
+  ];
+
+  @override
   Widget build(BuildContext context) {
+    // Filter products based on category and search query
+    final filteredProducts = products.where((product) {
+      final matchesCategory = selectedCategory == 'All' || product['category'] == selectedCategory;
+      final matchesQuery = product['name'].toLowerCase().contains(searchQuery.toLowerCase());
+      return matchesCategory && matchesQuery;
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Skincare'),
-        backgroundColor: Colors.blue, // Blue for the AppBar
-        centerTitle: true,
+        title: const Text('Search Products'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Navigasi kembali ke halaman sebelumnya
+          },
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            // Input Search with a more modern and clean design
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search skincare products...',
-                hintStyle: TextStyle(
-                    color: Colors.blue[600]), // Lighter blue for hint text
-                prefixIcon: const Icon(Icons.search,
-                    color: Colors.blue), // Blue search icon
-                filled: true,
-                fillColor: Colors.white, // White background for input field
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30), // Rounded corners
-                  borderSide: BorderSide.none, // Remove default border
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: const BorderSide(
-                      color: Colors.blueAccent,
-                      width: 2), // Blue border on focus
-                ),
-              ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
               onChanged: (value) {
-                // Add search logic here
+                setState(() {
+                  searchQuery = value;
+                });
               },
+              decoration: InputDecoration(
+                hintText: 'Search products...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
+                prefixIcon: const Icon(Icons.search),
+              ),
             ),
-            const SizedBox(height: 20),
-            // Display search results using Card for a more stylish look
-            Expanded(
-              child: ListView.builder(
-                itemCount: 5, // Replace with actual search result count
-                itemBuilder: (context, index) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    elevation: 5, // Card shadow effect
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(16),
-                      leading: const CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage(
-                            'assets/skincare_product.jpg'), // Replace with product image
-                      ),
-                      title: Text(
-                        'Skincare Facial Wash ${index + 1}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87, // Black text for title
-                          fontSize: 16,
-                        ),
-                      ),
-                      subtitle: const Text(
-                        'Hydrating & Gentle Formula',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      trailing: const Icon(
-                        Icons.arrow_forward,
-                        color: Colors.blueAccent, // Blue icon for forward arrow
-                      ),
-                      onTap: () {
-                        // Handle click action here
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text('Clicked on Product ${index + 1}')),
-                        );
+          ),
+
+          // Category Tabs
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: categories.map((category) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: ChoiceChip(
+                      label: Text(category),
+                      selected: selectedCategory == category,
+                      onSelected: (selected) {
+                        setState(() {
+                          selectedCategory = category;
+                        });
                       },
                     ),
                   );
-                },
+                }).toList(),
               ),
             ),
-          ],
-        ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Product List
+          Expanded(
+            child: filteredProducts.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No products found',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: filteredProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = filteredProducts[index];
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            children: [
+                              // Product Image
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  product['imageUrl'],
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+
+                              // Product Details
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      product['name'],
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '\$${product['price'].toStringAsFixed(2)}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
       ),
     );
   }

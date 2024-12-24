@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                     _buildNavButton(context, 'Moisturizer'),
                     _buildNavButton(context, 'Sunscreen'),
                     _buildNavButton(context, 'Night Cream'),
-                    _buildNavButton(context, 'Scrub')
+                    _buildNavButton(context, 'Mask')
                   ],
                 ),
               ),
