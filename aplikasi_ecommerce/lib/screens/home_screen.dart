@@ -6,6 +6,7 @@ import 'package:aplikasi_ecommerce/models/home.dart';
 import 'package:aplikasi_ecommerce/screens/cart_screen.dart';
 import 'package:aplikasi_ecommerce/screens/profile_screen.dart';
 import 'package:aplikasi_ecommerce/screens/search_screen.dart';
+import 'package:aplikasi_ecommerce/screens/detail_screen.dart';
 
 void main() {
   runApp(const HomeScreen());
@@ -284,9 +285,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
   // GRID PRODUK
-  Widget _buildProductCard(SkincareProduct product) {
-    return Container(
+Widget _buildProductCard(SkincareProduct product) {
+  return GestureDetector(
+    onTap: () {
+      // Navigate to DetailScreen when the product is tapped
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailScreen(skincareProduct: product),
+        ),
+      );
+    },
+    child: Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
@@ -309,6 +321,7 @@ class _HomePageState extends State<HomePage> {
                   const BorderRadius.vertical(top: Radius.circular(15)),
               image: DecorationImage(
                 image: NetworkImage(product.imageUrl),
+                fit: BoxFit.cover, // Make sure the image fits properly
               ),
             ),
           ),
@@ -349,6 +362,11 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+ 
+
+          // DETAIL PRODUKKKKKKKKKKKKK
 }
