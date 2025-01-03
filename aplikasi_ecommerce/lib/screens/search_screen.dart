@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:aplikasi_ecommerce/screens/home_screen.dart'; // Pastikan Anda mengimpor HomeScreen
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -12,19 +11,28 @@ class _SearchScreenState extends State<SearchScreen> {
   String selectedCategory = 'All';
   String searchQuery = '';
 
-  final List<String> categories = ['All', 'Cream', 'Moisturizers', 'Lotion', 'Serum', 'Spray'];
+  final List<String> categories = [
+    'All',
+    'Cream',
+    'Moisturizers',
+    'Lotion',
+    'Serum',
+    'Spray'
+  ];
 
   // Example product data
   final List<Map<String, dynamic>> products = [
     {
       'name': 'Skintific Brightening Serum',
-      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe8_ENcHPuulBp0h58ye1qwWhS2vfZ5tAPHw&s',
+      'imageUrl':
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe8_ENcHPuulBp0h58ye1qwWhS2vfZ5tAPHw&s',
       'price': 23.00,
       'category': 'Serum'
     },
     {
       'name': 'Skintific Exfoliating Lotion',
-      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTa8PIi5PhOH_YpfFbwKHUOaIbSxcoEzOh2A&s',
+      'imageUrl':
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTa8PIi5PhOH_YpfFbwKHUOaIbSxcoEzOh2A&s',
       'price': 15.00,
       'category': 'Lotion'
     },
@@ -34,8 +42,10 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     // Filter products based on category and search query
     final filteredProducts = products.where((product) {
-      final matchesCategory = selectedCategory == 'All' || product['category'] == selectedCategory;
-      final matchesQuery = product['name'].toLowerCase().contains(searchQuery.toLowerCase());
+      final matchesCategory =
+          selectedCategory == 'All' || product['category'] == selectedCategory;
+      final matchesQuery =
+          product['name'].toLowerCase().contains(searchQuery.toLowerCase());
       return matchesCategory && matchesQuery;
     }).toList();
 
