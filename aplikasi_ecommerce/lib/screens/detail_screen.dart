@@ -159,7 +159,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         const SizedBox(width: 8),
                         const SizedBox(
                           width: 70,
-                          child: Text('Type',
+                          child: Text('Desc',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         Text(': ${widget.skincareProduct.description}')
