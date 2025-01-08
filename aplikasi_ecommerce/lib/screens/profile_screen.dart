@@ -17,23 +17,25 @@ class ProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Bagian Foto Profil
-            const Center(
+            Center(
               child: Column(
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: AssetImage('assets/images/profile.png'),
+                    backgroundColor: Colors.grey[300],
+                    child:
+                        Icon(Icons.person, size: 80, color: Colors.grey[600]),
                     // Ganti dengan path gambar Anda
                   ),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 10),
+                  const Text(
                     'John Doe',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'john.doe@example.com',
                     style: TextStyle(
                       fontSize: 16,
