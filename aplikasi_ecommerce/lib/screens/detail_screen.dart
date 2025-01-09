@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:aplikasi_ecommerce/models/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aplikasi_ecommerce/screens/cart_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   final SkincareProduct skincareProduct;
