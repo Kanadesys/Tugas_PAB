@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/data/home_data.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
